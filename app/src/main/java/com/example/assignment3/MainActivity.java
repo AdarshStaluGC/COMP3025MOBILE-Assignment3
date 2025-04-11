@@ -1,22 +1,23 @@
 package com.example.assignment3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.assignment3.adapters.MovieAdapter;
 import com.example.assignment3.databinding.ActivityMainBinding;
 import com.example.assignment3.models.MovieModel;
 import com.example.assignment3.utils.ApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,18 +33,31 @@ public class MainActivity extends AppCompatActivity {
     private List<MovieModel> movieList;
     private MovieAdapter movieAdapter;
 
+    private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // ViewBinding setup
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Firebase Auth check
+        auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        // Setup RecyclerView
         movieList = new ArrayList<>();
         movieAdapter = new MovieAdapter(this, movieList);
-
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recyclerView.setAdapter(movieAdapter);
 
-
+        // Search button click
         binding.searchButton.setOnClickListener(v -> {
             String query = binding.searchView.getQuery().toString();
             if (!query.isEmpty()) {
@@ -52,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // SearchView submit
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -67,6 +81,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
+        });
+
+        // BottomNavigationView item selection
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_favorites) {
+                startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+                return true;
+            }
+            return true; // current is Search
         });
     }
 
@@ -94,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
                                         movieJson.getString("Year"),
                                         movieJson.getString("imdbID"),
                                         movieJson.getString("Type"),
-                                        movieJson.getString("Poster")));
+                                        movieJson.getString("Poster")
+                                ));
                             }
                             runOnUiThread(() -> {
                                 movieList.clear();
@@ -102,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                                 movieAdapter.notifyDataSetChanged();
                             });
                         } else {
-                            runOnUiThread(() -> Toast.makeText(MainActivity.this,
-                                    "No movies found", Toast.LENGTH_SHORT).show());
+                            runOnUiThread(() ->
+                                    Toast.makeText(MainActivity.this, "No movies found", Toast.LENGTH_SHORT).show());
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
