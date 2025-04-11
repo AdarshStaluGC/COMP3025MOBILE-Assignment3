@@ -1,4 +1,4 @@
-package com.example.assignment2.models;
+package com.example.assignment3.models;
 
 public class MovieModel {
     private String title, year, imdbID, type, poster;

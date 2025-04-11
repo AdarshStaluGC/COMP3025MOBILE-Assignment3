@@ -1,4 +1,4 @@
-package com.example.assignment2.adapters;
+package com.example.assignment3.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.assignment2.MovieDetailsActivity;
-import com.example.assignment2.R;
-import com.example.assignment2.models.MovieModel;
+import com.example.assignment3.MovieDetailsActivity;
+import com.example.assignment3.R;
+import com.example.assignment3.models.MovieModel;
 
 import java.util.List;
 

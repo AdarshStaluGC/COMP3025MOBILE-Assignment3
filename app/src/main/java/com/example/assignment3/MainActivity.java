@@ -1,4 +1,4 @@
-package com.example.assignment2;
+package com.example.assignment3;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.assignment2.adapters.MovieAdapter;
-import com.example.assignment2.databinding.ActivityMainBinding;
-import com.example.assignment2.models.MovieModel;
-import com.example.assignment2.utils.ApiClient;
+import com.example.assignment3.adapters.MovieAdapter;
+import com.example.assignment3.databinding.ActivityMainBinding;
+import com.example.assignment3.models.MovieModel;
+import com.example.assignment3.utils.ApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

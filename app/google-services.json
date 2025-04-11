@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:384398707795:android:b84ba28c71e2f4addd0aa6",
+        "mobilesdk_app_id": "1:384398707795:android:a1dedad8e83c0d97dd0aa6",
         "android_client_info": {
-          "package_name": "com.example.assignmnet2"
+          "package_name": "com.example.assignment3"
         }
       },
       "oauth_client": [],

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.assignment2"
+    namespace = "com.example.assignment3"
     compileSdk = 35
 
     defaultConfig {
