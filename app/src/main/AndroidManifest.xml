@@ -28,6 +28,11 @@
         <!-- MovieDetailsActivity -->
         <activity android:name=".MovieDetailsActivity"
             android:exported="false"/>
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".FavoritesActivity"/>
+        <activity android:name=".FavoriteDetailsActivity"/>
+
 
     </application>
 
