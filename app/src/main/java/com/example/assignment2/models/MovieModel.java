@@ -100,4 +100,8 @@ public class MovieModel {
     public String getPoster() {
         return poster;
     }
+
+    public void setPlot(String plot) {
+        this.plot = plot;
+    }
 }

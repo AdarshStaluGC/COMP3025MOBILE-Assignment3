@@ -44,11 +44,11 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.okhttp)
     implementation(libs.glide)
-    implementation(libs.firebase.firestore)
-    implementation("com.google.firebase:firebase-auth:22.3.0") // or latest stable version
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
 }
