@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.8.0"
 firebaseAuth = "22.3.0"
 firebaseFirestore = "24.9.0"
 glide = "4.15.1"
