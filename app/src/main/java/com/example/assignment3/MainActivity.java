@@ -29,44 +29,49 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    // View binding object to access XML layout components
     private ActivityMainBinding binding;
+
+    // List and adapter for displaying movies in RecyclerView
     private List<MovieModel> movieList;
     private MovieAdapter movieAdapter;
 
+    // Firebase Authentication instance
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ViewBinding setup
+        // Inflate layout using ViewBinding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Firebase Auth check
+        // 🔐 Check if user is logged in
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
+            // Redirect to login if not authenticated
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
 
-        // Setup RecyclerView
+        // 📽 Set up RecyclerView for displaying movies
         movieList = new ArrayList<>();
         movieAdapter = new MovieAdapter(this, movieList);
-        binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2-column grid
         binding.recyclerView.setAdapter(movieAdapter);
 
-        // Search button click
+        // 🔍 Search button click listener
         binding.searchButton.setOnClickListener(v -> {
             String query = binding.searchView.getQuery().toString();
             if (!query.isEmpty()) {
                 fetchMovies(query);
-                binding.searchView.clearFocus();
+                binding.searchView.clearFocus(); // Hide keyboard
             }
         });
 
-        // SearchView submit
+        // 🔎 Handle keyboard "submit" in SearchView
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -79,26 +84,30 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                // Optional: implement live search
                 return false;
             }
         });
 
-        // BottomNavigationView item selection
+        // ⬇️ Bottom navigation setup
         binding.bottomNav.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_favorites) {
+                // Navigate to favorites screen
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 return true;
             }
-            return true; // current is Search
+            return true; // Already on search tab
         });
     }
 
+    // 📡 API call to fetch movies from OMDb API (via ApiClient)
     private void fetchMovies(String query) {
         ApiClient.getMovies(query, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this,
-                        "Failed to fetch movies", Toast.LENGTH_SHORT).show());
+                // Run on UI thread to show toast
+                runOnUiThread(() ->
+                        Toast.makeText(MainActivity.this, "Failed to fetch movies", Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -109,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         if (jsonObject.has("Search")) {
                             JSONArray searchArray = jsonObject.getJSONArray("Search");
+
+                            // Parse movie results
                             List<MovieModel> movies = new ArrayList<>();
                             for (int i = 0; i < searchArray.length(); i++) {
                                 JSONObject movieJson = searchArray.getJSONObject(i);
@@ -120,17 +131,19 @@ public class MainActivity extends AppCompatActivity {
                                         movieJson.getString("Poster")
                                 ));
                             }
+
+                            // Update UI on the main thread
                             runOnUiThread(() -> {
                                 movieList.clear();
                                 movieList.addAll(movies);
-                                movieAdapter.notifyDataSetChanged();
+                                movieAdapter.notifyDataSetChanged(); // Refresh RecyclerView
                             });
                         } else {
                             runOnUiThread(() ->
                                     Toast.makeText(MainActivity.this, "No movies found", Toast.LENGTH_SHORT).show());
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        e.printStackTrace(); // Log error for debugging
                     }
                 }
             }
